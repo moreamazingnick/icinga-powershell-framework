@@ -84,12 +84,12 @@ function Write-IcingaFrameworkCodeCache()
     # Load modules from directory
     Get-ChildItem -Path $directory -Recurse -Filter '*.psm1' |
         ForEach-Object {
-            $CacheContent += (Get-Content -Path $_.FullName -Raw);
+            $CacheContent += (Get-Content -Path $_.FullName -Raw -Encoding 'UTF8');
             $CacheContent += "`r`n";
         }
 
     $CacheContent += "Export-ModuleMember -Function @( '*' ) -Alias @( '*' ) -Variable @( '*' )";
-    Set-Content -Path $CacheFile -Value $CacheContent;
+    Set-Content -Path $CacheFile -Value $CacheContent -Encoding 'UTF8';
 
     Remove-IcingaFrameworkDependencyFile;
 }

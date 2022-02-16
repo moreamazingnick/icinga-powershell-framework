@@ -17,6 +17,7 @@ Released closed milestones can be found on [GitHub](https://github.com/Icinga/ic
 * [#478](https://github.com/Icinga/icinga-powershell-framework/pull/478) Fixes connection option "Connecting from parent system" which is not asking for ca.crt path
 * [#479](https://github.com/Icinga/icinga-powershell-framework/pull/479) Fixes possible exceptions while trying to remove downloaded repository temp files which might still contain a file lock from virusscanners or other tasks
 * [#480](https://github.com/Icinga/icinga-powershell-framework/pull/480) Fixes service locking during Icinga Agent upgrade and ensures errors on service management are caught and printed with internal error handling
+* [#482](https://github.com/Icinga/icinga-powershell-framework/pull/482) Fixes encoding problems with special chars or German umlauts during plugin execution and unescaped whitespace in plugin argument strings like `Icinga for Windows`, which was previously wrongly rended as `Icinga` for example
 
 ### Enhancements
 
