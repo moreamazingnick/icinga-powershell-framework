@@ -112,6 +112,6 @@ function New-IcingaForWindowsRESTThread()
         }
 
         # Force Icinga for Windows Garbage Collection
-        Optimize-IcingaForWindowsMemory -ClearErrorStack;
+        Optimize-IcingaForWindowsMemory -ClearErrorStack -SmartGC;
     }
 }

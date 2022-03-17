@@ -19,6 +19,7 @@ Released closed milestones can be found on [GitHub](https://github.com/Icinga/ic
 * [#480](https://github.com/Icinga/icinga-powershell-framework/pull/480) Fixes service locking during Icinga Agent upgrade and ensures errors on service management are caught and printed with internal error handling
 * [#483](https://github.com/Icinga/icinga-powershell-framework/issues/483) Fixes REST-Api SSL certificate lookup from the Icinga Agent, in case a custom hostname was used or in certain domain environments were domain is not matching DNS domain
 * [#490](https://github.com/Icinga/icinga-powershell-framework/pull/490) Fixes the command `Uninstall-IcingaComponent` for the `service` component which is not doing anything
+* [#491](https://github.com/Icinga/icinga-powershell-framework/issues/491) Fixes GC collection with `Optimize-IcingaForWindowsMemory` for every incoming REST connection call
 
 ### Enhancements
 
