@@ -6,7 +6,7 @@ function Start-IcingaAgentDirectorWizard()
         $OverrideDirectorVars      = $null,
         [bool]$RunInstaller        = $FALSE,
         [switch]$ForceTemplateKey  = $FALSE,
-	    [string]$Hostname = $null
+        [string]$Hostname = $null
     );
 
     [hashtable]$DirectorOverrideArgs        = @{ }
