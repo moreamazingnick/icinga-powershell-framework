@@ -5,7 +5,12 @@ function Start-IcingaAgentDirectorWizard()
         [string]$SelfServiceAPIKey = $null,
         $OverrideDirectorVars      = $null,
         [bool]$RunInstaller        = $FALSE,
+<<<<<<< HEAD
         [switch]$ForceTemplateKey  = $FALSE
+=======
+        [switch]$ForceTemplateKey  = $FALSE,
+        [string]$Hostname = $null
+>>>>>>> b7bcd352 (fixes whitespace)
     );
 
     [hashtable]$DirectorOverrideArgs        = @{ }
