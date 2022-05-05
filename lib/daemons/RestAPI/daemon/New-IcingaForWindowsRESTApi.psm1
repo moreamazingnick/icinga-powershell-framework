@@ -78,7 +78,7 @@ function New-IcingaForWindowsRESTApi()
     while ($TRUE) {
 
         # Force Icinga for Windows Garbage Collection
-        Optimize-IcingaForWindowsMemory -ClearErrorStack;
+        Optimize-IcingaForWindowsMemory -ClearErrorStack -SmartGC;
 
         $Connection = Open-IcingaTCPClientConnection `
             -Client (New-IcingaTCPClient -Socket $Socket) `
@@ -108,7 +108,7 @@ function New-IcingaForWindowsRESTApi()
                 continue;
             }
 
-            $Global:Icinga.Public.Daemons.RESTApi.ApiRequests.$NextRESTApiThreadId.Enqueue($Connection);
+            $Global:Icinga.Public.Daemons.RESTApi.ApiRequests.$NextRESTApiThreadId.Add($Connection);
         } catch {
             Write-IcingaEventMessage -Namespace 'RESTApi' -EvenId 2050 -ExceptionObject $_;
         }

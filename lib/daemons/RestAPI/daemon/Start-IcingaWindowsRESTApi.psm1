@@ -51,7 +51,7 @@ function Start-IcingaWindowsRESTApi()
         [string]$CertThumbprint = $null,
         [bool]$RequireAuth      = $FALSE,
         [int]$ConcurrentThreads = 5,
-        [int]$Timeout           = 30
+        [int]$Timeout           = 120
     );
 
     New-IcingaForWindowsRESTEnvironment -ThreadCount $ConcurrentThreads;
@@ -75,8 +75,9 @@ function Start-IcingaWindowsRESTApi()
 
     while ($ConcurrentThreads -gt 0) {
         $ConcurrentThreads                         = $ConcurrentThreads - 1;
-        [System.Collections.Queue]$RESTThreadQueue = @();
-        $Global:Icinga.Public.Daemons.RESTApi.ApiRequests.Add($ThreadId, [System.Collections.Queue]::Synchronized($RESTThreadQueue));
+        $RESTThreadQueue = New-Object System.Collections.Concurrent.BlockingCollection[PSObject] `
+            -ArgumentList (New-Object System.Collections.Concurrent.ConcurrentQueue[PSObject]);
+        $Global:Icinga.Public.Daemons.RESTApi.ApiRequests.Add($ThreadId, $RESTThreadQueue);
         Start-IcingaForWindowsRESTThread -ThreadId $ThreadId -RequireAuth:$RequireAuth;
         $ThreadId += 1;
 

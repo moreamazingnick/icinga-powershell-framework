@@ -20,18 +20,26 @@
 
 function Restart-IcingaService()
 {
-    param(
+    param (
         $Service
     );
 
     if (Get-Service "$Service" -ErrorAction SilentlyContinue) {
         Write-IcingaConsoleNotice ([string]::Format('Restarting service "{0}"', $Service));
-        powershell.exe -Command {
-            $Service = $args[0]
 
-            Restart-Service "$Service";
+        & powershell.exe -Command {
+            $Service = $args[0];
+            try {
+                Restart-Service "$Service" -ErrorAction Stop;
+                Start-Sleep -Seconds 2;
+                Optimize-IcingaForWindowsMemory;
+            } catch {
+                Write-IcingaConsoleError -Message 'Failed to restart service "{0}". Error: {1}' -Objects $Service, $_.Exception.Message;
+            }
         } -Args $Service;
     } else {
         Write-IcingaConsoleWarning -Message 'The service "{0}" is not installed' -Objects $Service;
     }
+
+    Optimize-IcingaForWindowsMemory;
 }

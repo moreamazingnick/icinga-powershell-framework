@@ -43,6 +43,10 @@ function Get-IcingaJEAConfiguration()
         $ModuleFileContent = '';
 
         foreach ($PSFile in $ModuleFiles) {
+            if ($PSFile.Name.ToLower() -eq ([string]::Format('{0}.ifw_compilation.psm1', $module.Name))) {
+                continue;
+            }
+
             $DeserializedFile = Read-IcingaPowerShellModuleFile -File $PSFile.FullName;
             $RawModuleContent = $DeserializedFile.NormalisedContent;
 
@@ -72,8 +76,8 @@ function Get-IcingaJEAConfiguration()
                 }
             }
 
-            if ($null -ne (Select-String -InputObject $SourceCode -Pattern 'add-type' -SimpleMatch) -Or $null -ne (Select-String -InputObject $SourceCode -Pattern 'typedefinition@"' -SimpleMatch) -Or $null -ne (Select-String -InputObject $SourceCode -Pattern '@"' -SimpleMatch)) {
-                Write-IcingaConsoleWarning 'The module "{0}" is using "Add-Type" definitions for file "{1}". Ensure you validate the code before trusting this publisher.' -Objects $module.Name, $PSFile.FullName;
+            if ($null -ne (Select-String -InputObject $SourceCode -Pattern 'add-type' -SimpleMatch) -Or $null -ne (Select-String -InputObject $SourceCode -Pattern 'add-icingaaddtypelib' -SimpleMatch) -Or $null -ne (Select-String -InputObject $SourceCode -Pattern 'typedefinition@"' -SimpleMatch) -Or $null -ne (Select-String -InputObject $SourceCode -Pattern '@"' -SimpleMatch)) {
+                Write-IcingaConsoleWarning 'The module "{0}" is using "Add-Type" or "Add-IcingaAddTypeLib" definitions for file "{1}". Ensure you validate the code before trusting this publisher.' -Objects $module.Name, $PSFile.FullName;
             }
         }
 

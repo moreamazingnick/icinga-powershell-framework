@@ -1,6 +1,6 @@
 function New-IcingaForWindowsRESTThread()
 {
-    param(
+    param (
         $RequireAuth,
         $ThreadId
     );
@@ -16,17 +16,8 @@ function New-IcingaForWindowsRESTThread()
                 continue;
             }
 
-            if ($Global:Icinga.Public.Daemons.RESTApi.ApiRequests.$ThreadId.Count -eq 0) {
-                Start-Sleep -Milliseconds 10;
-                continue;
-            }
-
-            $Connection = $Global:Icinga.Public.Daemons.RESTApi.ApiRequests.$ThreadId.Dequeue();
-
-            if ($null -eq $Connection) {
-                Start-Sleep -Milliseconds 10;
-                continue;
-            }
+            # block sleeping until content available
+            $Connection = $Global:Icinga.Public.Daemons.RESTApi.ApiRequests.$ThreadId.Take();
 
             # Read the received message from the stream by using our smart functions
             [string]$RestMessage = Read-IcingaTCPStream -Client $Connection.Client -Stream $Connection.Stream;
@@ -69,6 +60,9 @@ function New-IcingaForWindowsRESTThread()
                     }
                 }
 
+                # Set our thread being active
+                Set-IcingaForWindowsThreadAlive -ThreadName $Global:Icinga.Protected.ThreadName -Active -TerminateAction @{ 'Command' = 'Close-IcingaTCPConnection'; 'Arguments' = @{ 'Client' = $Connection.Client } };
+
                 # We should remove clients from the blacklist who are sending valid requests
                 Remove-IcingaRESTClientBlacklist -Client $Connection.Client -ClientList $Global:Icinga.Public.Daemons.RESTApi.ClientBlacklist;
                 switch (Get-IcingaRESTPathElement -Request $RESTRequest -Index 0) {
@@ -85,6 +79,10 @@ function New-IcingaForWindowsRESTThread()
                         ) -Stream $Connection.Stream;
                     };
                 }
+
+                # set our thread no longer be active. We do this, because below there is no way we can
+                # actually get stuck on a endless loop, caused by external modules
+                Set-IcingaForWindowsThreadAlive -ThreadName $Global:Icinga.Protected.ThreadName;
             }
         } catch {
             $ExMsg = $_.Exception.Message;
@@ -100,11 +98,9 @@ function New-IcingaForWindowsRESTThread()
 
         # Finally close the clients connection as we are done here and
         # ensure this thread will close by simply leaving the function
-        if ($null -ne $Connection) {
-            Close-IcingaTCPConnection -Client $Connection.Client;
-        }
+        Close-IcingaTCPConnection -Client $Connection.Client;
 
         # Force Icinga for Windows Garbage Collection
-        Optimize-IcingaForWindowsMemory -ClearErrorStack;
+        Optimize-IcingaForWindowsMemory -ClearErrorStack -SmartGC;
     }
 }

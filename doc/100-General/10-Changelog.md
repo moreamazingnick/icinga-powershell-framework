@@ -7,6 +7,29 @@ documentation before upgrading to a new release.
 
 Released closed milestones can be found on [GitHub](https://github.com/Icinga/icinga-powershell-framework/milestones?state=closed).
 
+## 1.9.0 (2022-05-03)
+
+[Issue and PRs](https://github.com/Icinga/icinga-powershell-framework/milestone/20?closed=1)
+
+### Bugfixes
+
+* [#472](https://github.com/Icinga/icinga-powershell-framework/pull/472) Fixes random errors while dynamically compiling Add-Type code by now writing a DLL inside `cache/dll` for later usage
+* [#478](https://github.com/Icinga/icinga-powershell-framework/pull/478) Fixes connection option "Connecting from parent system" which is not asking for ca.crt path
+* [#479](https://github.com/Icinga/icinga-powershell-framework/pull/479) Fixes possible exceptions while trying to remove downloaded repository temp files which might still contain a file lock from virusscanners or other tasks
+* [#480](https://github.com/Icinga/icinga-powershell-framework/pull/480) Fixes service locking during Icinga Agent upgrade and ensures errors on service management are caught and printed with internal error handling
+* [#483](https://github.com/Icinga/icinga-powershell-framework/issues/483) Fixes REST-Api SSL certificate lookup from the Icinga Agent, in case a custom hostname was used or in certain domain environments were domain is not matching DNS domain
+* [#490](https://github.com/Icinga/icinga-powershell-framework/pull/490) Fixes the command `Uninstall-IcingaComponent` for the `service` component which is not doing anything
+* [#491](https://github.com/Icinga/icinga-powershell-framework/issues/491) Fixes GC collection with `Optimize-IcingaForWindowsMemory` for every incoming REST connection call
+* [#497](https://github.com/Icinga/icinga-powershell-framework/pull/497) Fixes loop sleep for idle REST-Api threads by replacing them with [BlockingCollection](https://docs.microsoft.com/en-us/dotnet/api/system.collections.concurrent.blockingcollection-1?view=net-6.0) [ConcurrentQueue](https://docs.microsoft.com/en-us/dotnet/api/system.collections.concurrent.concurrentqueue-1?view=net-6.0)
+
+### Enhancements
+
+* [#469](https://github.com/Icinga/icinga-powershell-framework/pull/469) Improves plugin doc generator to allow multi-lines in code examples and updates plugin overview as table, adding a short description on what the plugin is for
+* [#495](https://github.com/Icinga/icinga-powershell-framework/pull/495) Adds feature to check the sign status for the local Icinga Agent certificate and notifying the user, in case the certificate is not yet signed by the Icinga CA
+* [#496](https://github.com/Icinga/icinga-powershell-framework/pull/496) Improves REST-Api default timeout for internal plugin execution calls from 30s to 120s
+* [#498](https://github.com/Icinga/icinga-powershell-framework/pull/498) Adds feature for thread queuing optimisation and frozen thread detection for REST calls
+* [#514](https://github.com/Icinga/icinga-powershell-framework/pull/514) Adds support for Icinga for Windows module isolation
+
 ## 1.8.0 (2022-02-08)
 
 [Issue and PRs](https://github.com/Icinga/icinga-powershell-framework/milestone/19?closed=1)

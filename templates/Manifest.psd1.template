@@ -1,6 +1,5 @@
 @{
     ModuleVersion     = '$MODULEVERSION$'
-    RootModule        = '$ROOTMODULE$'
     GUID              = '$GUID$'
     Author            = '$AUTHOR$'
     CompanyName       = '$COMPANYNAME$'
@@ -13,10 +12,16 @@
     NestedModules     = @(
         $NESTEDMODULES$
     )
-    FunctionsToExport = @( '*' )
+    FunctionsToExport = @(
+        $FUNCTIONSTOEXPORT$
+    )
     CmdletsToExport   = @( '*' )
-    VariablesToExport = @( '*' )
-    AliasesToExport   = @( '*' )
+    VariablesToExport = @(
+        $VARIABLESTOEXPORT$
+    )
+    AliasesToExport   = @(
+        $ALIASESTOEXPORT$
+    )
     PrivateData       = @{
         PSData   = @{
             Tags         = @( $TAGS$ )
